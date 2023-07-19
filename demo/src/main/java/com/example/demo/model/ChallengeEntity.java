@@ -15,9 +15,9 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "Todo")
+@Table(name = "Challenge")
 @Entity
-public class TodoEntity {
+public class ChallengeEntity {
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy = "uuid")
@@ -26,3 +26,4 @@ public class TodoEntity {
 	private String title;
 	private boolean done;
 }
+
