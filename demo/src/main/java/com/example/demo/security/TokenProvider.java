@@ -4,6 +4,8 @@ import com.example.demo.model.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +16,7 @@ import java.util.Date;
 @Slf4j
 @Service
 public class TokenProvider {
-	//private final Key key;
-	private static final String SECRET_KEY = "NMA8JPctFuna59f5";
+	private static final String SECRET_KEY = "Q4NSl604sgyHJj1qwEkR3ycUeR4uUAt7WJraD7EN3O9DVM4yyYuHxMEbSF4XXyYJkal13eqgB0F7Bq4Hxasdw123425aaadwnfgfWERHYXsqrewsw1526612EEywtes";
 
 	public String create(UserEntity userEntity) {
 		// 기한 지금으로부터 1일로 설정
@@ -26,7 +27,6 @@ public class TokenProvider {
 		// JWT Token 생성
 		return Jwts.builder()
 						// header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
-						//.signWith(SignatureAlgorithm.HS512, SECRET_KEY)
 						.signWith(SignatureAlgorithm.HS512, SECRET_KEY)
 						// payload에 들어갈 내용
 						.setSubject(userEntity.getId()) // sub
