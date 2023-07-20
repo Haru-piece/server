@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Slf4j
 @RestController
@@ -24,6 +26,8 @@ public class UserController {
 
 	@Autowired
 	private TokenProvider tokenProvider;
+
+	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
 	// 회원가입
 	@PostMapping("/signup")
@@ -33,7 +37,7 @@ public class UserController {
 			UserEntity user = UserEntity.builder()
 							.email(userDTO.getEmail())
 							.username(userDTO.getUsername())
-							.password(userDTO.getPassword())
+							.password(passwordEncoder.encode(userDTO.getPassword()))
 							.build();
 			// service를 이용해 repository에 유저 저장
 			UserEntity registeredUser = userService.create(user);
@@ -58,7 +62,8 @@ public class UserController {
 	public ResponseEntity<?> authenticate(@RequestBody UserDTO userDTO) {
 		UserEntity user = userService.getByCredentials(
 						userDTO.getEmail(),
-						userDTO.getPassword());
+						userDTO.getPassword(),
+						passwordEncoder);
 
 		if(user != null) {
 			// 토큰 생성

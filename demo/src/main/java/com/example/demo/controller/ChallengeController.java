@@ -7,6 +7,8 @@ import com.example.demo.service.ChallengeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +30,9 @@ public class ChallengeController {
 	
 	//Create
 	@PostMapping
-	public ResponseEntity<?> createChallenge(@RequestBody ChallengeDTO dto) {
+	public ResponseEntity<?> createChallenge(
+			@AuthenticationPrincipal String userId,
+			@RequestBody ChallengeDTO dto) {
 		try {
 			String temporaryUserId = "temporary-user"; // temporary user id.
 
@@ -38,14 +42,13 @@ public class ChallengeController {
 			// (2) id를 null로 초기화 한다. 생성 당시에는 id가 없어야 하기 때문이다.
 			entity.setId(null);
 
-			// (3) 임시 유저 아이디를 설정 해 준다.
-			entity.setUserId(temporaryUserId);
+			// (3) 유저 아이디를 설정 해 준다.
+			entity.setUserId(userId);
 
 			// (4) 서비스를 이용해 Challenge엔티티를 생성한다.
 			List<ChallengeEntity> entities = service.create(entity);
 
 			// (5) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.
-
 			List<ChallengeDTO> dtos = entities.stream().map(ChallengeDTO::new).collect(Collectors.toList());
 
 			// (6) 변환된 ChallengeDTO리스트를 이용해 ResponseDTO를 초기화한다.
@@ -55,7 +58,6 @@ public class ChallengeController {
 			return ResponseEntity.ok().body(response);
 		} catch (Exception e) {
 			// (8) 혹시 예외가 나는 경우 dto대신 error에 메시지를 넣어 리턴한다.
-
 			String error = e.getMessage();
 			ResponseDTO<ChallengeDTO> response = ResponseDTO.<ChallengeDTO>builder().error(error).build();
 			return ResponseEntity.badRequest().body(response);
@@ -64,19 +66,20 @@ public class ChallengeController {
 	
 	// Retrieve
 	@GetMapping
-	public ResponseEntity<?> retrieveChallengeList() {
+	public ResponseEntity<?> retrieveChallengeList(
+			@AuthenticationPrincipal String userId) {
 		String temporaryUserId = "temporary-user"; // temporary user id.
 
 		// (1) 서비스 메서드의 retrieve메서드를 사용해 Todo리스트를 가져온다
-		List<ChallengeEntity> entities = service.retrieve(temporaryUserId);
+		List<ChallengeEntity> entities = service.retrieve(userId);
 
 		// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 TodoDTO리스트로 변환한다.
 		List<ChallengeDTO> dtos = entities.stream().map(ChallengeDTO::new).collect(Collectors.toList());
 
-		// (6) 변환된 TodoDTO리스트를 이용해ResponseDTO를 초기화한다.
+		// (3) 변환된 TodoDTO리스트를 이용해ResponseDTO를 초기화한다.
 		ResponseDTO<ChallengeDTO> response = ResponseDTO.<ChallengeDTO>builder().data(dtos).build();
 
-		// (7) ResponseDTO를 리턴한다.
+		// (4) ResponseDTO를 리턴한다.
 		return ResponseEntity.ok().body(response);
 	}
 	
