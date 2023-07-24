@@ -21,6 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;  
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("challenge")
 public class ChallengeController {
@@ -34,8 +40,6 @@ public class ChallengeController {
 			@AuthenticationPrincipal String userId,
 			@RequestBody ChallengeDTO dto) {
 		try {
-			String temporaryUserId = "temporary-user"; // temporary user id.
-
 			// (1) ChallengeEntity로 변환한다.
 			ChallengeEntity entity = ChallengeDTO.toEntity(dto);
 
@@ -68,15 +72,13 @@ public class ChallengeController {
 	@GetMapping
 	public ResponseEntity<?> retrieveChallengeList(
 			@AuthenticationPrincipal String userId) {
-		String temporaryUserId = "temporary-user"; // temporary user id.
-
-		// (1) 서비스 메서드의 retrieve메서드를 사용해 Todo리스트를 가져온다
+		// (1) 서비스 메서드의 retrieve메서드를 사용해 Challenge리스트를 가져온다
 		List<ChallengeEntity> entities = service.retrieve(userId);
 
-		// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 TodoDTO리스트로 변환한다.
+		// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.
 		List<ChallengeDTO> dtos = entities.stream().map(ChallengeDTO::new).collect(Collectors.toList());
 
-		// (3) 변환된 TodoDTO리스트를 이용해ResponseDTO를 초기화한다.
+		// (3) 변환된 ChallengeDTO리스트를 이용해ResponseDTO를 초기화한다.
 		ResponseDTO<ChallengeDTO> response = ResponseDTO.<ChallengeDTO>builder().data(dtos).build();
 
 		// (4) ResponseDTO를 리턴한다.
@@ -86,7 +88,24 @@ public class ChallengeController {
 	// Update
 	
 	// Delete
+	
+	// Retrieve All Challenge
+	@GetMapping("/all")
+	public ResponseEntity<?> retrieveAllChallengeList(
+			@AuthenticationPrincipal String userId) {
+		// (1) 서비스 메서드의 retrieveAll메서드를 사용해 모든 Challenge 리스트를 가져온다
+		List<ChallengeEntity> entities = service.retrieveAll();
 
+		// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.
+		List<ChallengeDTO> dtos = entities.stream().map(ChallengeDTO::new).collect(Collectors.toList());
+
+		// (3) 변환된 ChallengeDTO리스트를 이용해ResponseDTO를 초기화한다.
+		ResponseDTO<ChallengeDTO> response = ResponseDTO.<ChallengeDTO>builder().data(dtos).build();
+
+		// (4) ResponseDTO를 리턴한다.
+		return ResponseEntity.ok().body(response);
+	}
+	
 	
 }
 

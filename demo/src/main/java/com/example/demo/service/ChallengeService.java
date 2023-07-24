@@ -37,6 +37,11 @@ public class ChallengeService {
 	 
 	// Delete
 	
+	// Retrieve All Challenges
+	public List<ChallengeEntity> retrieveAll() {
+		return repository.findAll();
+	}
+	
 	// Validate
 	public void validate(final ChallengeEntity entity) {
 		if(entity == null) {

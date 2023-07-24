@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,6 +12,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;  
 
 @Builder
 @NoArgsConstructor
@@ -25,5 +30,6 @@ public class ChallengeEntity {
 	private String userId;
 	private String title;
 	private boolean done;
+	private LocalDateTime AddedDate;
 }
 
