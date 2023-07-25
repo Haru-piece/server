@@ -30,6 +30,7 @@ public class ChallengeEntity {
 	private String userId;
 	private String title;
 	private boolean done;
-	private LocalDateTime AddedDate;
+	private LocalDateTime addedDate;
+	private Integer participantCount;
 }
 

@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,6 +43,17 @@ public class ChallengeService {
 		return repository.findAll();
 	}
 	
+	// Retrieve All Challenges Sorted By Date
+	public List<ChallengeEntity> retrieveAllSortedByDate() {
+		return repository.findAll(Sort.by(Sort.Direction.ASC, "addedDate"));
+	}
+	
+	// Retrieve All Challenges Sorted By Participants' Count
+	public List<ChallengeEntity> retrieveAllSortedByParticipantCount() {
+		return repository.findAll(Sort.by(Sort.Direction.DESC, "participantCount"));
+	}
+	
+
 	// Validate
 	public void validate(final ChallengeEntity entity) {
 		if(entity == null) {

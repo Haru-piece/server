@@ -18,13 +18,15 @@ public class ChallengeDTO {
 	private String id;
 	private String title;
 	private boolean done;
-	private LocalDateTime AddedDate;
+	private LocalDateTime addedDate;
+	private Integer participantCount;
 	
 	public ChallengeDTO(final ChallengeEntity entity) {
 		this.id = entity.getId();
 		this.title = entity.getTitle();
 		this.done = entity.isDone();
-		this.AddedDate = entity.getAddedDate();
+		this.addedDate = entity.getAddedDate();
+		this.participantCount = entity.getParticipantCount();
 	}
 	
 	public static ChallengeEntity toEntity(final ChallengeDTO dto) {
@@ -33,7 +35,10 @@ public class ChallengeDTO {
 						.title(dto.getTitle())
 						.done(dto.isDone())
 						//현재 Date 추가
-						.AddedDate(LocalDateTime.now())
+						.addedDate(LocalDateTime.now())
+						
+						//원래는 0으로 시작해야 하는데, 테스트하기 위해서 dto에서 받아온다.
+						.participantCount(dto.getParticipantCount())
 						.build();
 	}
 
