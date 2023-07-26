@@ -1,11 +1,14 @@
 package com.example.demo.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +18,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;  
+import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
 
 @Builder
 @NoArgsConstructor
@@ -32,5 +37,9 @@ public class ChallengeEntity {
 	private boolean done;
 	private LocalDateTime addedDate;
 	private Integer participantCount;
+	
+	@OneToMany(mappedBy = "challenge")
+	private List<UserEntity> challengers = new ArrayList<UserEntity>();
+
 }
 

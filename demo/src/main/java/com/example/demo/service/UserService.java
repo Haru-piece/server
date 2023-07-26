@@ -1,8 +1,12 @@
 package com.example.demo.service;
 
+import com.example.demo.model.ChallengeEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.persistence.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,6 +33,11 @@ public class UserService {
 		}
 		
 		return null;
+	}
+	
+	// Retrieve All Users
+	public List<UserEntity> retrieveAll() {
+		return userRepository.findAll();
 	}
 	
 	public void validate(final UserEntity userEntity) {

@@ -48,9 +48,9 @@ public class ChallengeController {
 
 			// (3) 유저 아이디를 설정 해 준다.
 			entity.setUserId(userId);
-
+			
 			// (4) 서비스를 이용해 Challenge엔티티를 생성한다.
-			List<ChallengeEntity> entities = service.create(entity);
+			List<ChallengeEntity> entities = service.createWithRelation(entity);
 
 			// (5) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.
 			List<ChallengeDTO> dtos = entities.stream().map(ChallengeDTO::new).collect(Collectors.toList());

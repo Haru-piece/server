@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 
 @Data
 @Entity
@@ -34,4 +37,8 @@ public class UserEntity {
 
 	@Column(nullable = false)
 	private String password; // 패스워드
+	
+	@ManyToOne
+	@JoinColumn(name = "CHALLENGE_ID")
+	private ChallengeEntity challenge;
 }
