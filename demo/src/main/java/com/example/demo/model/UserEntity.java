@@ -14,10 +14,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
-
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -40,6 +43,9 @@ public class UserEntity {
 	@Column(nullable = false)
 	private String password; // 패스워드
 	
+	@ElementCollection
+	private List<String> recentViewChallengeId;
+	
 	//초기에 임시 Challenge를 할당해줄 때 뜨는
 	//"java.lang.IllegalStateException: org.hibernate.TransientPropertyValueException: 
 	//object references an unsaved transient instance - save the transient instance before flushing"
@@ -50,4 +56,5 @@ public class UserEntity {
 	@ManyToOne(cascade = {CascadeType.ALL}) 
 	@JoinColumn(name = "CHALLENGE_ID")
 	private ChallengeEntity challenge;
+
 }

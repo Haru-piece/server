@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.ChallengeEntity;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,12 +22,14 @@ public class UserDTO {
 	private String id;
 	
 	private String challengeEntityTitle;
+	private List<String> recentViewChallengeId;
 	
 
 	public UserDTO(final UserEntity entity) {
 		this.id = entity.getId();
 		this.password = entity.getPassword();
 		this.challengeEntityTitle = entity.getChallenge().getTitle();
+		this.recentViewChallengeId = entity.getRecentViewChallengeId();
 	}
 	
 }

@@ -94,6 +94,26 @@ public class ChallengeService {
 		return challengeRepository.findByUserId(userId);
 	}
 	
+	// Retrieve Æ¯Á¤ entity
+	public List<ChallengeEntity> retrieveSpecificChallenge(final ChallengeEntity entity, final String userId){
+		String challengeId = entity.getId();
+		List<ChallengeEntity> list = List.of(challengeRepository.findById(challengeId).get());
+		
+		addRecentViewChallengeId(userId, challengeId);
+		return list;
+	}
+	
+	public void addRecentViewChallengeId(String userId, String viewedChallengeId) {
+		UserEntity userEntity = userRepository.findById(userId).get();
+		
+		List<String> recentViewChallengeId = userEntity.getRecentViewChallengeId();
+		
+		if(recentViewChallengeId.size() >= 5) recentViewChallengeId.remove(0);
+		userEntity.getRecentViewChallengeId().add(viewedChallengeId);
+		
+		userRepository.save(userEntity);
+	}
+	
 	// Update
 	 
 	// Delete
@@ -126,5 +146,6 @@ public class ChallengeService {
 			throw new RuntimeException("Unknown user.");
 		}
 	}
+
 
 }

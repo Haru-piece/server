@@ -17,7 +17,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;  
+import java.time.LocalDateTime;
+
 import javax.persistence.OneToMany;
 import javax.persistence.JoinColumn;
 

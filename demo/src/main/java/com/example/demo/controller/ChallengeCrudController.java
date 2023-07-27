@@ -78,6 +78,36 @@ public class ChallengeCrudController {
 		return ResponseEntity.ok().body(response);
 	}
 	
+	//특정 챌린지 조희
+	@GetMapping("/this")
+	public ResponseEntity<?> retrieveChallenge(
+			@AuthenticationPrincipal String userId,
+			@RequestBody ChallengeDTO dto){
+		
+		try {
+			// (1) ChallengeEntity로 변환한다.
+			ChallengeEntity entity = ChallengeDTO.toEntity(dto);
+
+			// (2) 서비스를 이용해 특정 Challenge엔티티를 조회한다.
+			List<ChallengeEntity> entities = service.retrieveSpecificChallenge(entity, userId);
+
+			// (3) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.
+			List<ChallengeDTO> dtos = entities.stream().map(ChallengeDTO::new).collect(Collectors.toList());
+
+			// (4) 변환된 ChallengeDTO리스트를 이용해 ResponseDTO를 초기화한다.
+			ResponseDTO<ChallengeDTO> response = ResponseDTO.<ChallengeDTO>builder().data(dtos).build();
+
+			// (5) ResponseDTO를 리턴한다.
+			return ResponseEntity.ok().body(response);
+		} catch (Exception e) {
+			// (6) 혹시 예외가 나는 경우 dto대신 error에 메시지를 넣어 리턴한다.
+			String error = e.getMessage();
+			ResponseDTO<ChallengeDTO> response = ResponseDTO.<ChallengeDTO>builder().error(error).build();
+			return ResponseEntity.badRequest().body(response);
+		}
+		
+	}
+	
 	// Update
 	
 	// Delete
