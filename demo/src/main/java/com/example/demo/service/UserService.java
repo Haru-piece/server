@@ -21,6 +21,12 @@ public class UserService {
 
 	public UserEntity create(final UserEntity userEntity) {
 		validate(userEntity);
+		
+		// auth/all할 때 ChallengeEntity가 null인 userEntity를 받아오지 못해서
+		// 임시로 할당해줌
+		ChallengeEntity mockChallengeEntity = ChallengeEntity.builder().build();
+		userEntity.setChallenge(mockChallengeEntity);
+		
 		return userRepository.save(userEntity);
 	}
 

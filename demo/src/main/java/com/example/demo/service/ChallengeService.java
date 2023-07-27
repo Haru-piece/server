@@ -25,36 +25,57 @@ public class ChallengeService {
 	private UserRepository userRepository;
 	
 	// Create With Relation
-	public List<ChallengeEntity> createWithRelation(ChallengeEntity entity) {
+	public List<ChallengeEntity> createWithRelation(final ChallengeEntity challengeEntity) {
+		
 		// Validations
-		validate(entity);
+		validate(challengeEntity);
 			
 		//1. ChallengerRepository에 새로운 Challenge를 저장합니다.
 		//2. 이 때, 새로운 Challenge를 사용하려는 유저들의 모임에 Create한 유저의 정보를 저장합니다.
 		//3. Create한 유저의 Challenge 내역에 해당 Challenge를 저장합니다.
 		
-		String challengeUserId = entity.getUserId();
+		String challengeUserId = challengeEntity.getUserId();
 		Optional<UserEntity> original = userRepository.findById(challengeUserId);
 			
 		if(original.isPresent()) {
-			final UserEntity challengeUserEntity = original.get();
-					
+			//challenge 사용자 수 추가
+			challengeEntity.setParticipantCount(challengeEntity.getParticipantCount() + 1);
+			
 			//1.
-			challengeRepository.save(entity);
+			challengeRepository.save(challengeEntity);
 				
-			log.info("Entity Id : {} is saved.", entity.getId());
+			log.info("Entity Id : {} is saved.", challengeEntity.getId());
 			
-			//3.
-			challengeUserEntity.setChallenge(entity);
-			userRepository.save(challengeUserEntity);
 			
-			//2.
-			entity.getChallengers().add(challengeUserEntity);
+			//2. + 3.
+			final UserEntity challengeUserEntity = original.get();
+			saveRelationBetweenChallengeAndUser(challengeEntity, challengeUserEntity);
 		}
 		
-		return challengeRepository.findByUserId(entity.getUserId());
+		return challengeRepository.findByUserId(challengeEntity.getUserId());
+	}
+	
+	public List<ChallengeEntity> participateChallenge(final ChallengeEntity challengeEntity){
+		log.info("What we want to find : {}", challengeEntity.getId());
+		
+		Optional<ChallengeEntity> original = challengeRepository.findById(challengeEntity.getId());
+		
+		if(original.isPresent()) {
+			ChallengeEntity editedChallengeEntity = original.get();
+			return createWithRelation(editedChallengeEntity);
+		}
+		else return null;
 	}
 
+	public void saveRelationBetweenChallengeAndUser(ChallengeEntity challengeEntity, UserEntity challengeUserEntity) {
+		//3.
+		challengeUserEntity.setChallenge(challengeEntity);
+		userRepository.save(challengeUserEntity);
+		
+		//2.
+		challengeEntity.getChallengers().add(challengeUserEntity);
+	}
+	
 	// Create
 	// 원본입니다. CreateWithRelation이 망가졌을 때를 대비한 백업입니다.
 	public List<ChallengeEntity> create(final ChallengeEntity entity) {

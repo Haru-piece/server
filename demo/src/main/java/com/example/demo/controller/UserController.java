@@ -97,7 +97,7 @@ public class UserController {
 	@GetMapping("/all")
 	public ResponseEntity<?> retrieveAllUserList(
 				@AuthenticationPrincipal String userId) {
-		// (1) 서비스 메서드의 retrieveAll메서드를 사용해 모든 Challenge 리스트를 가져온다
+		// (1) 서비스 메서드의 retrieveAll메서드를 사용해 모든 User 리스트를 가져온다
 		List<UserEntity> entities = userService.retrieveAll();
 
 		// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 userDTO리스트로 변환한다.
