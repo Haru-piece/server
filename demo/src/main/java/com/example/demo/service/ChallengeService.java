@@ -35,6 +35,9 @@ public class ChallengeService {
 		//3. Create한 유저의 Challenge 내역에 해당 Challenge를 저장합니다.
 		
 		String challengeUserId = challengeEntity.getUserId();
+		
+		log.info("Challenge User Id : {}", challengeEntity.getUserId());
+		
 		Optional<UserEntity> original = userRepository.findById(challengeUserId);
 			
 		if(original.isPresent()) {
@@ -55,15 +58,25 @@ public class ChallengeService {
 		return challengeRepository.findByUserId(challengeEntity.getUserId());
 	}
 	
-	public List<ChallengeEntity> participateChallenge(final ChallengeEntity challengeEntity){
+	public List<ChallengeEntity> participateChallenge(final ChallengeEntity challengeEntity,
+													  final String userId){
 		log.info("What we want to find : {}", challengeEntity.getId());
 		
 		Optional<ChallengeEntity> original = challengeRepository.findById(challengeEntity.getId());
 		
 		if(original.isPresent()) {
 			ChallengeEntity editedChallengeEntity = original.get();
-			return createWithRelation(editedChallengeEntity);
+			//return createWithRelation(editedChallengeEntity);
+			
+			editedChallengeEntity.setParticipantCount(editedChallengeEntity.getParticipantCount() + 1);
+			challengeRepository.save(editedChallengeEntity);
+			
+			final UserEntity challengeUserEntity = userRepository.findById(userId).get();
+			saveRelationBetweenChallengeAndUser(editedChallengeEntity, challengeUserEntity);
+			
+			return challengeRepository.findAll();
 		}
+		
 		else return null;
 	}
 
