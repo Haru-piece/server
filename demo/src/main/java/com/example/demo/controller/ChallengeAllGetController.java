@@ -46,7 +46,7 @@ public class ChallengeAllGetController {
 	@GetMapping("/all/date")
 	public ResponseEntity<?> retrieveAllChallengeListSortedByDate(
 				@AuthenticationPrincipal String userId) {
-		// (1) 서비스 메서드의 retrieveAll메서드를 사용해 모든 Challenge 리스트를 가져온다
+		// (1) 서비스 메서드의 retrieveAllSortedByDate메서드를 사용해 모든 Challenge 리스트를 날짜 순으로 가져온다
 		List<ChallengeEntity> entities = service.retrieveAllSortedByDate();
 
 		// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.
@@ -63,7 +63,7 @@ public class ChallengeAllGetController {
 	@GetMapping("/all/count")
 	public ResponseEntity<?> retrieveAllChallengeListSortedByParticipantCount(
 					@AuthenticationPrincipal String userId) {
-		// (1) 서비스 메서드의 retrieveAll메서드를 사용해 모든 Challenge 리스트를 가져온다
+		// (1) 서비스 메서드의 retrieveAllSortedByParticipantCount메서드를 사용해 참여자 수 순으로 모든 Challenge 리스트를 가져온다
 		List<ChallengeEntity> entities = service.retrieveAllSortedByParticipantCount();
 
 		// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.

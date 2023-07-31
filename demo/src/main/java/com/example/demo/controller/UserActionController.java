@@ -39,16 +39,16 @@ public class UserActionController {
 			// (2) 서비스를 이용해 참여 수행
 			List<ChallengeEntity> entities = service.participateChallenge(entity, userId);
 
-			// (5) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.
+			// (3) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.
 			List<ChallengeDTO> dtos = entities.stream().map(ChallengeDTO::new).collect(Collectors.toList());
 
-			// (6) 변환된 ChallengeDTO리스트를 이용해 ResponseDTO를 초기화한다.
+			// (4) 변환된 ChallengeDTO리스트를 이용해 ResponseDTO를 초기화한다.
 			ResponseDTO<ChallengeDTO> response = ResponseDTO.<ChallengeDTO>builder().data(dtos).build();
 
-			// (7) ResponseDTO를 리턴한다.
+			// (5) ResponseDTO를 리턴한다.
 			return ResponseEntity.ok().body(response);
 		} catch (Exception e) {
-			// (8) 혹시 예외가 나는 경우 dto대신 error에 메시지를 넣어 리턴한다.
+			// (6) 혹시 예외가 나는 경우 dto대신 error에 메시지를 넣어 리턴한다.
 			String error = e.getMessage();
 			ResponseDTO<ChallengeDTO> response = ResponseDTO.<ChallengeDTO>builder().error(error).build();
 			return ResponseEntity.badRequest().body(response);

@@ -47,6 +47,7 @@ public class UserController {
 							.username(userDTO.getUsername())
 							.password(passwordEncoder.encode(userDTO.getPassword()))
 							.build();
+			
 			// service를 이용해 repository에 유저 저장
 			UserEntity registeredUser = userService.create(user);
 			UserDTO responseUserDTO = UserDTO.builder()

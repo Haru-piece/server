@@ -58,39 +58,40 @@ public class ChallengeService {
 		return challengeRepository.findByUserId(challengeEntity.getUserId());
 	}
 	
+	//특정 Challenge에 가입할 때
 	public List<ChallengeEntity> participateChallenge(final ChallengeEntity challengeEntity,
 													  final String userId){
-		log.info("What we want to find : {}", challengeEntity.getId());
-		
 		Optional<ChallengeEntity> original = challengeRepository.findById(challengeEntity.getId());
 		
 		if(original.isPresent()) {
 			ChallengeEntity editedChallengeEntity = original.get();
-			//return createWithRelation(editedChallengeEntity);
 			
+			//challenge 사용자 수 증가
 			editedChallengeEntity.setParticipantCount(editedChallengeEntity.getParticipantCount() + 1);
-			challengeRepository.save(editedChallengeEntity);
 			
+			//challenge에 가입할 때 관계 설정
 			final UserEntity challengeUserEntity = userRepository.findById(userId).get();
 			saveRelationBetweenChallengeAndUser(editedChallengeEntity, challengeUserEntity);
-			
-			return challengeRepository.findAll();
 		}
 		
-		else return null;
+		return challengeRepository.findAll();
 	}
 
+	//Challenge와 User 간 관계 설정
+	//1. 유저에 도전하는 Challenge의 정보 저장
+	//2. Challenge에 해당 Challenge에 참여한 유저의 정보 저장
 	public void saveRelationBetweenChallengeAndUser(ChallengeEntity challengeEntity, UserEntity challengeUserEntity) {
-		//3.
+		//1.
 		challengeUserEntity.setChallenge(challengeEntity);
 		userRepository.save(challengeUserEntity);
 		
 		//2.
 		challengeEntity.getChallengers().add(challengeUserEntity);
+		
+		challengeRepository.save(challengeEntity);
 	}
 	
 	// Create
-	// 원본입니다. CreateWithRelation이 망가졌을 때를 대비한 백업입니다.
 	public List<ChallengeEntity> create(final ChallengeEntity entity) {
 		// Validations
 		validate(entity);
@@ -116,6 +117,7 @@ public class ChallengeService {
 		return list;
 	}
 	
+	// 최근 조회한 챌린지의 Id를 유저의 RecentViewChallengeId에 저장한다.
 	public void addRecentViewChallengeId(String userId, String viewedChallengeId) {
 		UserEntity userEntity = userRepository.findById(userId).get();
 		

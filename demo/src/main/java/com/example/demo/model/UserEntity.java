@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.persistence.Column;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
@@ -32,6 +33,7 @@ public class UserEntity {
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy = "uuid")
+	@Column(name = "USER_ID")
 	private String id; // 유저에게 고유하게 부여되는 id.
 
 	@Column(nullable = false)
@@ -44,7 +46,7 @@ public class UserEntity {
 	private String password; // 패스워드
 	
 	@ElementCollection
-	private List<String> recentViewChallengeId;
+	private List<String> recentViewChallengeId; //유저가 최근에 조회한 챌린지들의 Id를 저장
 	
 	//초기에 임시 Challenge를 할당해줄 때 뜨는
 	//"java.lang.IllegalStateException: org.hibernate.TransientPropertyValueException: 
@@ -53,7 +55,7 @@ public class UserEntity {
 	//auth/all을 하기 위한 옵션이니
 	//후에 auth/all을 사용하지 않아도 될 경우 없애도 됨.
 	
-	@ManyToOne(cascade = {CascadeType.ALL}) 
+	@ManyToOne //(cascade = {CascadeType.ALL}) 
 	@JoinColumn(name = "CHALLENGE_ID")
 	private ChallengeEntity challenge;
 
