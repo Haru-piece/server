@@ -94,6 +94,11 @@ public class UserController {
 		}
 	}
 	
+	//auth/all, auth/mine은 
+	//참여하고 있는 Challenge가 없는 userEntity에서
+	//getChallenge()를 할 때 null을 받아오므로
+	//nullExceptionError가 뜸.
+	
 	// Retrieve All Challenge
 	@GetMapping("/all")
 	public ResponseEntity<?> retrieveAllUserList(
@@ -110,4 +115,23 @@ public class UserController {
 		// (4) ResponseDTO를 리턴한다.
 		return ResponseEntity.ok().body(response);
 	}
+	
+	
+	// Retrieve My Challenge
+	@GetMapping("/mine")
+	public ResponseEntity<?> retrieveMine(
+			@AuthenticationPrincipal String userId) {
+	// (1) 서비스 메서드의 retrieveAll메서드를 사용해 모든 User 리스트를 가져온다
+	List<UserEntity> entities = userService.retrieveMyEntity(userId);
+
+	// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 userDTO리스트로 변환한다.
+	List<UserDTO> dtos = entities.stream().map(UserDTO::new).collect(Collectors.toList());
+
+	// (3) 변환된 ChallengeDTO리스트를 이용해ResponseDTO를 초기화한다.
+	ResponseDTO<UserDTO> response = ResponseDTO.<UserDTO>builder().data(dtos).build();
+
+	// (4) ResponseDTO를 리턴한다.
+	return ResponseEntity.ok().body(response);
+}
+	
 }

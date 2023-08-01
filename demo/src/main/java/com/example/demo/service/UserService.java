@@ -6,6 +6,7 @@ import com.example.demo.persistence.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,16 @@ public class UserService {
 	// Retrieve All Users
 	public List<UserEntity> retrieveAll() {
 		return userRepository.findAll();
+	}
+	
+	// Retrieve My information
+	public List<UserEntity> retrieveMyEntity(String id) {
+		Optional<UserEntity> target = userRepository.findById(id);
+		
+		if(target == null) throw new RuntimeException("id is not valid.");
+		
+		List<UserEntity> list = List.of(userRepository.findById(id).get());
+		return list;
 	}
 	
 	public void validate(final UserEntity userEntity) {

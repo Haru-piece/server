@@ -29,6 +29,9 @@ public class ChallengeDTO {
 	//챌린지에 참여하고 있는 사용자 수
 	private Integer participantCount;
 	
+	//챌린지의 카테고리
+	private String category;
+	
 	//챌린지에 참여하고 있는 유저들의 Id
 	private List<String> challengerIds = new ArrayList<String>();
 	
@@ -38,6 +41,7 @@ public class ChallengeDTO {
 		this.done = entity.isDone();
 		this.addedDate = entity.getAddedDate();
 		this.participantCount = entity.getParticipantCount();
+		this.category = entity.getCategory();
 		
 		
 		this.challengerIds = (entity.getChallengers()).stream()
@@ -53,6 +57,7 @@ public class ChallengeDTO {
 						//현재 Date 추가
 						.addedDate(LocalDateTime.now())
 						.participantCount(0)
+						.category(dto.getCategory())
 						.challengers(new ArrayList<UserEntity>())
 						.build();
 	}

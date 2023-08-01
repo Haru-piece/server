@@ -38,6 +38,7 @@ public class ChallengeEntity {
 	private String title;
 	private boolean done;
 	private LocalDateTime addedDate;
+	private String category;
 	private Integer participantCount;
 	
 	//챌린지에 참여한 유저들의 정보를 저장

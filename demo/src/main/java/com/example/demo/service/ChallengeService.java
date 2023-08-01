@@ -148,6 +148,16 @@ public class ChallengeService {
 		return challengeRepository.findAll(Sort.by(Sort.Direction.DESC, "participantCount"));
 	}
 	
+	public List<ChallengeEntity> retrieveAllByCategory(String category){
+		return challengeRepository.findByCategory(category);
+	}
+	
+	public List<ChallengeEntity> retrieveAllByCategoryAndParticipantCount(String category){
+		return challengeRepository.findByCategoryOrderByParticipantCountDesc(category);
+	}
+	
+	
+	
 
 	// Validate
 	public void validate(final ChallengeEntity entity) {
