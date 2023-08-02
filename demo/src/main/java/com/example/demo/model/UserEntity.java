@@ -58,5 +58,13 @@ public class UserEntity {
 	@ManyToOne //(cascade = {CascadeType.ALL}) 
 	@JoinColumn(name = "CHALLENGE_ID")
 	private ChallengeEntity challenge;
+	
+	@JsonIgnore // Optional: If you want to exclude challenge from JSON serialization
+    public ChallengeEntity getChallenge() {
+        if (challenge == null) {
+            return ChallengeEntity.builder().title("참여하고 있는 챌린지가 없습니다.").build(); // You can return an empty ChallengeEntity or null as per your preference.
+        }
+        return challenge;
+    }
 
 }

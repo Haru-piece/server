@@ -140,7 +140,7 @@ public class ChallengeService {
 	
 	// Retrieve All Challenges Sorted By Date
 	public List<ChallengeEntity> retrieveAllSortedByDate() {
-		return challengeRepository.findAll(Sort.by(Sort.Direction.ASC, "addedDate"));
+		return challengeRepository.findAll(Sort.by(Sort.Direction.DESC, "addedDate"));
 	}
 	
 	// Retrieve All Challenges Sorted By Participants' Count
