@@ -94,12 +94,13 @@ public class UserController {
 		}
 	}
 	
-	//auth/all, auth/mine은 
-	//참여하고 있는 Challenge가 없는 userEntity에서
-	//getChallenge()를 할 때 null을 받아오므로
-	//nullExceptionError가 뜸.
 	
-	// Retrieve All Challenge
+	
+	/**********************/
+	/*     회원 탈퇴         */
+	/**********************/
+	
+	// Retrieve All User
 	@GetMapping("/all")
 	public ResponseEntity<?> retrieveAllUserList(
 				@AuthenticationPrincipal String userId) {
@@ -117,7 +118,7 @@ public class UserController {
 	}
 	
 	
-	// Retrieve My Challenge
+	// Retrieve My User Info
 	@GetMapping("/mine")
 	public ResponseEntity<?> retrieveMine(
 			@AuthenticationPrincipal String userId) {

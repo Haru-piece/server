@@ -12,6 +12,7 @@ import com.example.demo.persistence.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Iterator;
 
 @Slf4j
 @Service
@@ -76,6 +77,41 @@ public class ChallengeService {
 		
 		return challengeRepository.findAll();
 	}
+	
+	//가입한 특정 Challenge에서 나올 때
+	public List<ChallengeEntity> getOutFromChallenge(final ChallengeEntity challengeEntity,
+			  final String userId){
+		
+		final UserEntity challengeUserEntity = userRepository.findById(userId).get();
+		
+		//유저 정보에서 참여 중인 챌린지를 null로 설정한다.
+		challengeUserEntity.setChallenge(null);
+		
+		userRepository.save(challengeUserEntity);
+		
+		//챌린지에서 참여 중인 유저의 id를 삭제한다.
+		Optional<ChallengeEntity> original = challengeRepository.findById(challengeEntity.getId());
+		final ChallengeEntity editedChallengeEntity = original.get();
+		
+		List<UserEntity> challengers = editedChallengeEntity.getChallengers();
+		Iterator<UserEntity> iterator = challengers.iterator();
+		
+		while (iterator.hasNext()) {
+            UserEntity userEntity = iterator.next();
+            
+            if (userEntity.getId().equals(userId)) {
+                iterator.remove();
+            }
+        }
+		
+		//challenge 사용자 수 감소
+		editedChallengeEntity.setParticipantCount(editedChallengeEntity.getParticipantCount() - 1);
+				
+		challengeRepository.save(editedChallengeEntity);
+		
+		return challengeRepository.findAll();
+	}
+	
 
 	//Challenge와 User 간 관계 설정
 	//1. 유저에 도전하는 Challenge의 정보 저장

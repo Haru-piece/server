@@ -78,6 +78,17 @@ public class ChallengeCrudController {
 		return ResponseEntity.ok().body(response);
 	}
 	
+	
+	/**********************/
+	/*     Update         */
+	/**********************/
+	
+	
+	/**********************/
+	/*     Delete         */
+	/**********************/
+
+	
 	//Æ¯Á¤ Ã§¸°Áö Á¶Èñ
 	@GetMapping("/this")
 	public ResponseEntity<?> retrieveChallenge(
@@ -107,10 +118,5 @@ public class ChallengeCrudController {
 		}
 		
 	}
-	
-	// Update
-	
-	// Delete
-	
 
 }
