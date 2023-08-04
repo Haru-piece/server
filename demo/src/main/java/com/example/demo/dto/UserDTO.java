@@ -1,14 +1,14 @@
 package com.example.demo.dto;
 
+import com.example.demo.model.UserEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.example.demo.model.UserEntity;
-import com.example.demo.model.ChallengeEntity;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -21,15 +21,17 @@ public class UserDTO {
 	private String password;
 	private String id;
 	
-	private String challengeEntityTitle;
 	private List<String> recentViewChallengeId;
 	
+	private List<String> participatingChallengeIds;
 
 	public UserDTO(final UserEntity entity) {
 		this.id = entity.getId();
 		this.password = entity.getPassword();
-		this.challengeEntityTitle = entity.getChallenge().getTitle();
 		this.recentViewChallengeId = entity.getRecentViewChallengeId();
+		this.participatingChallengeIds = entity.getParticipatingChallengeEntities().stream()
+												.map(participatingChallenge -> participatingChallenge.getChallenge().getId())
+												.collect(Collectors.toList());
 	}
 	
 }

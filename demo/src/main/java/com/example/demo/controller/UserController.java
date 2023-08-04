@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ChallengeDTO;
 import com.example.demo.dto.ResponseDTO;
 import com.example.demo.dto.UserDTO;
-import com.example.demo.model.ChallengeEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.service.UserService;
 import com.example.demo.security.TokenProvider;

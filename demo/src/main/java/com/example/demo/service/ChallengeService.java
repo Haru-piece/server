@@ -9,10 +9,11 @@ import com.example.demo.model.ChallengeEntity;
 import com.example.demo.persistence.ChallengeRepository;
 import com.example.demo.model.UserEntity;
 import com.example.demo.persistence.UserRepository;
+import com.example.demo.model.ParticipatingChallengeEntity;
+import com.example.demo.persistence.ParticipatingChallengeRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Iterator;
 
 @Slf4j
 @Service
@@ -24,6 +25,9 @@ public class ChallengeService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ParticipatingChallengeRepository participatingChallengeRepository;
 	
 	// Create With Relation
 	public List<ChallengeEntity> createWithRelation(final ChallengeEntity challengeEntity) {
@@ -46,9 +50,9 @@ public class ChallengeService {
 			challengeEntity.setParticipantCount(challengeEntity.getParticipantCount() + 1);
 			
 			//1.
-			challengeRepository.save(challengeEntity);
+			//challengeRepository.save(challengeEntity);
 				
-			log.info("Entity Id : {} is saved.", challengeEntity.getId());
+			//log.info("Entity Id : {} is saved.", challengeEntity.getId());
 			
 			
 			//2. + 3.
@@ -58,6 +62,24 @@ public class ChallengeService {
 		
 		return challengeRepository.findByUserId(challengeEntity.getUserId());
 	}
+	
+	//Challenge와 User 간 관계 설정
+	//1. 유저에 도전하는 Challenge의 정보 저장
+	//2. Challenge에 해당 Challenge에 참여한 유저의 정보 저장
+	public void saveRelationBetweenChallengeAndUser(ChallengeEntity challengeEntity, UserEntity userEntity) {
+		ParticipatingChallengeEntity pCEntity = ParticipatingChallengeEntity.builder().build();
+		
+		pCEntity.setChallenge(challengeEntity);
+		challengeEntity.getParticipatingChallengeEntities().add(pCEntity);
+		
+		pCEntity.setUser(userEntity);
+		userEntity.getParticipatingChallengeEntities().add(pCEntity);
+		
+		challengeRepository.save(challengeEntity);
+		userRepository.save(userEntity);
+		participatingChallengeRepository.save(pCEntity);
+	}
+	
 	
 	//특정 Challenge에 가입할 때
 	public List<ChallengeEntity> participateChallenge(final ChallengeEntity challengeEntity,
@@ -79,52 +101,23 @@ public class ChallengeService {
 	}
 	
 	//가입한 특정 Challenge에서 나올 때
-	public List<ChallengeEntity> getOutFromChallenge(final ChallengeEntity challengeEntity,
-			  final String userId){
+	public List<ChallengeEntity> getOutFromChallenge(final String participatingChallengeId){
+		Optional<ParticipatingChallengeEntity> original = participatingChallengeRepository.findById(participatingChallengeId);
 		
-		final UserEntity challengeUserEntity = userRepository.findById(userId).get();
-		
-		//유저 정보에서 참여 중인 챌린지를 null로 설정한다.
-		challengeUserEntity.setChallenge(null);
-		
-		userRepository.save(challengeUserEntity);
-		
-		//챌린지에서 참여 중인 유저의 id를 삭제한다.
-		Optional<ChallengeEntity> original = challengeRepository.findById(challengeEntity.getId());
-		final ChallengeEntity editedChallengeEntity = original.get();
-		
-		List<UserEntity> challengers = editedChallengeEntity.getChallengers();
-		Iterator<UserEntity> iterator = challengers.iterator();
-		
-		while (iterator.hasNext()) {
-            UserEntity userEntity = iterator.next();
-            
-            if (userEntity.getId().equals(userId)) {
-                iterator.remove();
-            }
-        }
-		
-		//challenge 사용자 수 감소
-		editedChallengeEntity.setParticipantCount(editedChallengeEntity.getParticipantCount() - 1);
-				
-		challengeRepository.save(editedChallengeEntity);
+		if(original.isPresent()) {
+			ParticipatingChallengeEntity pCEntity = original.get();
+			
+			//challenge 사용자 수 감소
+			pCEntity.getChallenge().setParticipantCount(pCEntity.getChallenge().getParticipantCount() - 1);
+			challengeRepository.save(pCEntity.getChallenge());
+			
+			pCEntity.getChallenge().getParticipatingChallengeEntities().remove(pCEntity);
+			pCEntity.getUser().getParticipatingChallengeEntities().remove(pCEntity);
+			
+			participatingChallengeRepository.delete(pCEntity);
+		}
 		
 		return challengeRepository.findAll();
-	}
-	
-
-	//Challenge와 User 간 관계 설정
-	//1. 유저에 도전하는 Challenge의 정보 저장
-	//2. Challenge에 해당 Challenge에 참여한 유저의 정보 저장
-	public void saveRelationBetweenChallengeAndUser(ChallengeEntity challengeEntity, UserEntity challengeUserEntity) {
-		//1.
-		challengeUserEntity.setChallenge(challengeEntity);
-		userRepository.save(challengeUserEntity);
-		
-		//2.
-		challengeEntity.getChallengers().add(challengeUserEntity);
-		
-		challengeRepository.save(challengeEntity);
 	}
 	
 	// Create
@@ -192,9 +185,6 @@ public class ChallengeService {
 		return challengeRepository.findByCategoryOrderByParticipantCountDesc(category);
 	}
 	
-	
-	
-
 	// Validate
 	public void validate(final ChallengeEntity entity) {
 		if(entity == null) {
@@ -207,6 +197,4 @@ public class ChallengeService {
 			throw new RuntimeException("Unknown user.");
 		}
 	}
-
-
 }

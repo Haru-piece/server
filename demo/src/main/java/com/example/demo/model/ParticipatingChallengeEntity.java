@@ -16,31 +16,32 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.OneToMany;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
+import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "Challenge")
+@Table(name = "ParticipatingChallenge")
 @Entity
-public class ChallengeEntity {
+public class ParticipatingChallengeEntity {
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy = "uuid")
-	@Column(name = "CHALLENGE_ID")
+	@Column(name = "PARTICIPATING_CHALLENGE_ID")
 	private String id;
-	private String userId;
-	private String title;
-	private boolean done;
-	private LocalDateTime addedDate;
-	private String category;
-	private Integer participantCount;
 	
-	/*     Dictionary로 자료구조 변경 예정        */
-	//챌린지에 참여한 유저들의 정보를 저장
-	@OneToMany(mappedBy = "challenge")
-	private List<ParticipatingChallengeEntity> participatingChallengeEntities = new ArrayList<ParticipatingChallengeEntity>();
+	@ManyToOne
+	@JoinColumn(name = "CHALLENGE_ID")
+	private ChallengeEntity challenge;
+	
+	@ManyToOne
+	@JoinColumn(name = "USER_ID")
+	private UserEntity user;
+	
 }
-

@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.model.ChallengeEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.persistence.UserRepository;
 import lombok.extern.slf4j.Slf4j;
