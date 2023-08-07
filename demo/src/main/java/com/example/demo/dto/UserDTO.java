@@ -20,6 +20,7 @@ public class UserDTO {
 	private String username;
 	private String password;
 	private String id;
+	private Integer createCount;
 	
 	private List<String> recentViewChallengeId;
 	
@@ -32,6 +33,7 @@ public class UserDTO {
 		this.participatingChallengeIds = entity.getParticipatingChallengeEntities().stream()
 												.map(participatingChallenge -> participatingChallenge.getChallenge().getId())
 												.collect(Collectors.toList());
+		this.createCount = entity.getCreateCount();
 	}
 	
 }

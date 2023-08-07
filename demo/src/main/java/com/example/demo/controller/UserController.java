@@ -44,6 +44,7 @@ public class UserController {
 							.email(userDTO.getEmail())
 							.username(userDTO.getUsername())
 							.password(passwordEncoder.encode(userDTO.getPassword()))
+							.createCount(0)
 							.build();
 			
 			// service를 이용해 repository에 유저 저장
@@ -52,6 +53,7 @@ public class UserController {
 							.email(registeredUser.getEmail())
 							.id(registeredUser.getId())
 							.username(registeredUser.getUsername())
+							.createCount(registeredUser.getCreateCount())
 							.build();
 			
 			return ResponseEntity.ok(responseUserDTO);

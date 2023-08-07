@@ -49,5 +49,9 @@ public class UserEntity {
 		
 	@OneToMany(mappedBy = "user")
 	private List<ParticipatingChallengeEntity> participatingChallengeEntities = new ArrayList<ParticipatingChallengeEntity>();
+	
+	@OneToMany(mappedBy = "user")
+	private List<ParticipantWhoHasBadgeEntity> participantWhoHasBadge = new ArrayList<ParticipantWhoHasBadgeEntity>();
 
+	private Integer createCount = 0;
 }

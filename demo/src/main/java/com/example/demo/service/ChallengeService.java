@@ -29,6 +29,9 @@ public class ChallengeService {
 	@Autowired
 	private ParticipatingChallengeRepository participatingChallengeRepository;
 	
+	@Autowired
+	private BadgeGetConditionChecker badgeGetConditonChecker;
+	
 	// Create With Relation
 	public List<ChallengeEntity> createWithRelation(final ChallengeEntity challengeEntity) {
 		
@@ -38,6 +41,9 @@ public class ChallengeService {
 		//1. ChallengerRepository에 새로운 Challenge를 저장합니다.
 		//2. 이 때, 새로운 Challenge를 사용하려는 유저들의 모임에 Create한 유저의 정보를 저장합니다.
 		//3. Create한 유저의 Challenge 내역에 해당 Challenge를 저장합니다.
+		
+		//4. CreateCount를 하나 올려줍니다.
+		//5. Create King의 조건에 부합하면 Create King 뱃지를 수여합니다.
 		
 		String challengeUserId = challengeEntity.getUserId();
 		
@@ -55,9 +61,16 @@ public class ChallengeService {
 			//log.info("Entity Id : {} is saved.", challengeEntity.getId());
 			
 			
-			//2. + 3.
+			
 			final UserEntity challengeUserEntity = original.get();
+			//4.
+			challengeUserEntity.setCreateCount(challengeUserEntity.getCreateCount() + 1);
+			
+			//2. + 3.
 			saveRelationBetweenChallengeAndUser(challengeEntity, challengeUserEntity);
+			
+			//5.
+			badgeGetConditonChecker.createKing(challengeUserEntity);
 		}
 		
 		return challengeRepository.findByUserId(challengeEntity.getUserId());
