@@ -29,24 +29,21 @@ public class UserActionController {
 	private ChallengeService service;
 	
 	//Participate
-	@PostMapping("/participate")
+	@PostMapping("/participate/{challengeId}")
 	public ResponseEntity<?> participateChallenge(
 			@AuthenticationPrincipal String userId,
-			@RequestBody ChallengeDTO dto) {
+			@PathVariable String challengeId) {
 		try {
-			// (1) ChallengeEntity로 변환한다.
-			ChallengeEntity entity = ChallengeDTO.toEntity(dto);
+			// (1) 서비스를 이용해 참여 수행
+			List<ChallengeEntity> entities = service.participateChallenge(challengeId, userId);
 
-			// (2) 서비스를 이용해 참여 수행
-			List<ChallengeEntity> entities = service.participateChallenge(entity, userId);
-
-			// (3) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.
+			// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.
 			List<ChallengeDTO> dtos = entities.stream().map(ChallengeDTO::new).collect(Collectors.toList());
 
-			// (4) 변환된 ChallengeDTO리스트를 이용해 ResponseDTO를 초기화한다.
+			// (3) 변환된 ChallengeDTO리스트를 이용해 ResponseDTO를 초기화한다.
 			ResponseDTO<ChallengeDTO> response = ResponseDTO.<ChallengeDTO>builder().data(dtos).build();
 
-			// (5) ResponseDTO를 리턴한다.
+			// (4) ResponseDTO를 리턴한다.
 			return ResponseEntity.ok().body(response);
 		} catch (Exception e) {
 			// (6) 혹시 예외가 나는 경우 dto대신 error에 메시지를 넣어 리턴한다.
@@ -63,7 +60,7 @@ public class UserActionController {
 			@AuthenticationPrincipal String userId,
 			@PathVariable String participatingChallengeId) {
 		try {
-			// (1) 서비스를 이용해 참여 수행
+			// (1) 서비스를 이용해 참여한 챌린지에서 나가기
 			List<ChallengeEntity> entities = service.getOutFromChallenge(participatingChallengeId);
 
 			// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.

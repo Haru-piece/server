@@ -37,5 +37,15 @@ public class BadgeGetConditionChecker {
 			badgeGiver.becomeCreateKing(userEntity);
 		}
 	}
+	
+	public void participateKing(final UserEntity userEntity) {
+		Integer conditionForParticipateKing = 5;
+		
+		if(userEntity.getParticipateCount() == conditionForParticipateKing) {
+			badgeGiver.becomeParticipateKing(userEntity);
+		}
+	}
+
+	
 
 }

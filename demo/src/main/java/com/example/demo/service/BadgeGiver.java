@@ -53,6 +53,23 @@ public class BadgeGiver {
 		participantWhoHasBadgeRepository.save(pWHBadge);
 	}
 	
+	// participateKing (챌린지를 5개 참여했을 때 부여받는 뱃지)
+	public void becomeParticipateKing(final UserEntity userEntity) {
+		ParticipantWhoHasBadgeEntity pWHBadge = ParticipantWhoHasBadgeEntity.builder().build();
+			
+		pWHBadge.setUser(userEntity);
+		userEntity.getParticipantWhoHasBadge().add(pWHBadge);
+			
+		BadgeEntity participateKing = badgeRepository.findByName("ParticipateKing");
+			
+		pWHBadge.setBadge(participateKing);
+		participateKing.getParticipantWhoHasBadge().add(pWHBadge);
+			
+		badgeRepository.save(participateKing);
+		userRepository.save(userEntity);
+		participantWhoHasBadgeRepository.save(pWHBadge);
+	}	
+	
 	// Retrieve All Badges
 	public List<BadgeEntity> retrieveAll() {
 		return badgeRepository.findAll();

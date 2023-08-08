@@ -95,9 +95,9 @@ public class ChallengeService {
 	
 	
 	//특정 Challenge에 가입할 때
-	public List<ChallengeEntity> participateChallenge(final ChallengeEntity challengeEntity,
+	public List<ChallengeEntity> participateChallenge(final String challengeId,
 													  final String userId){
-		Optional<ChallengeEntity> original = challengeRepository.findById(challengeEntity.getId());
+		Optional<ChallengeEntity> original = challengeRepository.findById(challengeId);
 		
 		if(original.isPresent()) {
 			ChallengeEntity editedChallengeEntity = original.get();
@@ -105,10 +105,18 @@ public class ChallengeService {
 			//challenge 사용자 수 증가
 			editedChallengeEntity.setParticipantCount(editedChallengeEntity.getParticipantCount() + 1);
 			
-			//challenge에 가입할 때 관계 설정
 			final UserEntity challengeUserEntity = userRepository.findById(userId).get();
+			
+			//user의 참여 횟수 증가
+			challengeUserEntity.setParticipateCount(challengeUserEntity.getParticipateCount() + 1);
+			
+			//challenge에 가입할 때 관계 설정
 			saveRelationBetweenChallengeAndUser(editedChallengeEntity, challengeUserEntity);
+			
+			//participateKing 조건에 만족할 시 뱃지 수여
+			badgeGetConditonChecker.participateKing(challengeUserEntity);
 		}
+		else throw new RuntimeException("There's no challenge that have id you give.");
 		
 		return challengeRepository.findAll();
 	}
@@ -129,6 +137,8 @@ public class ChallengeService {
 			
 			participatingChallengeRepository.delete(pCEntity);
 		}
+		else throw new RuntimeException("There's no challenge that have id you give.");
+		
 		
 		return challengeRepository.findAll();
 	}

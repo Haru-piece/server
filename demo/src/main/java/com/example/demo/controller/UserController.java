@@ -45,6 +45,7 @@ public class UserController {
 							.username(userDTO.getUsername())
 							.password(passwordEncoder.encode(userDTO.getPassword()))
 							.createCount(0)
+							.participateCount(0)
 							.build();
 			
 			// service를 이용해 repository에 유저 저장
@@ -122,17 +123,16 @@ public class UserController {
 	@GetMapping("/mine")
 	public ResponseEntity<?> retrieveMine(
 			@AuthenticationPrincipal String userId) {
-	// (1) 서비스 메서드의 retrieveAll메서드를 사용해 모든 User 리스트를 가져온다
-	List<UserEntity> entities = userService.retrieveMyEntity(userId);
-
-	// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 userDTO리스트로 변환한다.
-	List<UserDTO> dtos = entities.stream().map(UserDTO::new).collect(Collectors.toList());
-
-	// (3) 변환된 ChallengeDTO리스트를 이용해ResponseDTO를 초기화한다.
-	ResponseDTO<UserDTO> response = ResponseDTO.<UserDTO>builder().data(dtos).build();
-
-	// (4) ResponseDTO를 리턴한다.
-	return ResponseEntity.ok().body(response);
-}
+		// (1) 서비스 메서드의 retrieveAll메서드를 사용해 모든 User 리스트를 가져온다
+		List<UserEntity> entities = userService.retrieveMyEntity(userId);
 	
+		// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 userDTO리스트로 변환한다.
+		List<UserDTO> dtos = entities.stream().map(UserDTO::new).collect(Collectors.toList());
+	
+		// (3) 변환된 ChallengeDTO리스트를 이용해ResponseDTO를 초기화한다.
+		ResponseDTO<UserDTO> response = ResponseDTO.<UserDTO>builder().data(dtos).build();
+	
+		// (4) ResponseDTO를 리턴한다.
+		return ResponseEntity.ok().body(response);
+	}
 }

@@ -17,10 +17,15 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         // 뱃지 데이터 저장
+    	
+    	//createKing
         BadgeEntity createKing = BadgeEntity.builder().name("CreateKing").build();
-       
         badgeRepository.save(createKing);
 
+        //participateKing
+        BadgeEntity participateKing = BadgeEntity.builder().name("ParticipateKing").build();
+        badgeRepository.save(participateKing);
+        
         // 추가적인 챌린지 데이터 저장
         // ...
     }

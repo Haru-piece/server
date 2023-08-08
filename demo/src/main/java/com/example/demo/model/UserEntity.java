@@ -54,4 +54,5 @@ public class UserEntity {
 	private List<ParticipantWhoHasBadgeEntity> participantWhoHasBadge = new ArrayList<ParticipantWhoHasBadgeEntity>();
 
 	private Integer createCount = 0;
+	private Integer participateCount = 0;
 }
