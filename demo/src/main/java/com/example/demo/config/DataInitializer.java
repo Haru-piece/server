@@ -19,7 +19,9 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
         // 뱃지 데이터 저장
     	
     	//createKing
-        BadgeEntity createKing = BadgeEntity.builder().name("CreateKing").build();
+        BadgeEntity createKing = BadgeEntity.builder().name("CreateKing")
+        											  .ImagePath("/images/createKing.png")
+        											  .build();
         badgeRepository.save(createKing);
 
         //participateKing

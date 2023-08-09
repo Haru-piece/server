@@ -17,10 +17,15 @@ public class ParticipatingChallengeDTO {
 	private String challengeName;
 	private String userName;
 	
+	//유저의 챌린지 성공 여부
+	private boolean success;
+	
 	public ParticipatingChallengeDTO(final ParticipatingChallengeEntity entity) {
 		this.id = entity.getId();
 		this.challengeName = entity.getChallenge().getTitle();
 		this.userName = entity.getUser().getEmail();
+		
+		this.success = entity.isSuccess();
 	}
 	
 }

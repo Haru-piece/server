@@ -1,7 +1,7 @@
 package com.example.demo.dto;
 
 import com.example.demo.model.BadgeEntity;
-import com.example.demo.model.ParticipatingChallengeEntity;
+import com.example.demo.model.ImageEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,16 +18,23 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class BadgeDTO {
+public class ImageDTO {
 	private String id;
-	private String name;
-	private String imagePath;
 	
-	public BadgeDTO(final BadgeEntity entity) {
+	//private String title;
+	
+	//private String content;
+	
+	private String filename;
+
+	private String filepath;
+	
+	public ImageDTO(final ImageEntity entity) {
 		this.id = entity.getId();
-		this.name = entity.getName();
-		this.imagePath = entity.getImagePath();
+		//this.title = entity.getTitle();
+		//this.content = entity.getContent();
+		this.filename = entity.getFilename();
+		this.filepath = entity.getFilepath();
 	}
+
 }
-
-

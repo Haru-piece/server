@@ -32,6 +32,9 @@ public class BadgeEntity {
 	private String id;
 	private String name;
 	
+	/* 이미지 경로 설정 */
+	private String ImagePath;
+	
 	/*     Dictionary로 자료구조 변경 예정        */
 	//챌린지에 참여한 유저들의 정보를 저장
 	@OneToMany(mappedBy = "badge")

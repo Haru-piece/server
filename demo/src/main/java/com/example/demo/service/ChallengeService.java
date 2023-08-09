@@ -88,6 +88,8 @@ public class ChallengeService {
 		pCEntity.setUser(userEntity);
 		userEntity.getParticipatingChallengeEntities().add(pCEntity);
 		
+		pCEntity.setSuccess(false);
+		
 		challengeRepository.save(challengeEntity);
 		userRepository.save(userEntity);
 		participatingChallengeRepository.save(pCEntity);

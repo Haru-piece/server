@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.ChallengeDTO;
 import com.example.demo.dto.ResponseDTO;
+import com.example.demo.dto.UserDTO;
 import com.example.demo.model.ChallengeEntity;
+import com.example.demo.model.UserEntity;
 import com.example.demo.service.ChallengeService;
+import com.example.demo.service.ParticipatingChallengeService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +29,9 @@ public class ChallengeAllGetController {
 	
 	@Autowired
 	private ChallengeService service;
+	
+	@Autowired
+	private ParticipatingChallengeService pCService;
 	
 	// Retrieve All Challenge
 	@GetMapping("/all")
@@ -56,9 +62,27 @@ public class ChallengeAllGetController {
 		return ResponseEntity.ok().body(response);
 	}
 	
+	// Retrieve All Participating Challenge
+	@GetMapping("/all/participate")
+	public ResponseEntity<?> retrieveAllParticipateChallenge(
+			@AuthenticationPrincipal String userId) {
+		// (1) 유저가 참여한 모든 Challenge 리스트를 가져온다
+		List<ChallengeEntity> entities = pCService.retrieveParticipateAll(userId);
+		
+		// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.
+		List<ChallengeDTO> dtos = entities.stream().map(ChallengeDTO::new).collect(Collectors.toList());
+		
+		// (3) 변환된 ChallengeDTO리스트를 이용해ResponseDTO를 초기화한다.
+		ResponseDTO<ChallengeDTO> response = ResponseDTO.<ChallengeDTO>builder().data(dtos).build();
+		
+		// (4) ResponseDTO를 리턴한다.
+		return ResponseEntity.ok().body(response);
+	}
+
+	
 	// Retrieve All Challenge Sorted By Category
 	@GetMapping("/all/category")
-	public ResponseEntity<?> retrieveAllChallengeLitByCategory(
+	public ResponseEntity<?> retrieveAllChallengeListByCategory(
 					@AuthenticationPrincipal String userId,
 					@RequestBody ChallengeDTO dto) {
 		// (1) 서비스 메서드의 retrieveAllSortedByParticipantCount메서드를 사용해 참여자 수 순으로 모든 Challenge 리스트를 가져온다
