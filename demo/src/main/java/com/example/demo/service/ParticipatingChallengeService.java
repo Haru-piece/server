@@ -61,5 +61,26 @@ public class ParticipatingChallengeService {
 		else throw new RuntimeException("challengeId를 잘못 입력했어요! ㅡㅡ");
 		
 	}
+	
+	// Update Success Info From Challenge
+	public List<ParticipatingChallengeEntity> updateSuccessInfoFromChallenge(String challengeId, 
+																			 String userId){
+		Optional<ParticipatingChallengeEntity> original = participatingChallengeRepository.findByChallengeIdAndUserId(challengeId, userId);
+			
+		if(original.isPresent()) {
+			ParticipatingChallengeEntity pCEntity = original.get();
+			
+			//성공으로 바꿔준다.
+			pCEntity.setSuccess(true);
+			//바꿔준 부분 저장
+			participatingChallengeRepository.save(pCEntity);
+			
+			return retrieveSuccessInfoFromChallenge(challengeId);
+		}
+			
+		else throw new RuntimeException("challengeId나 userId를 잘못 입력했어요! ㅡㅡ");
+			
+	}
+
 
 }

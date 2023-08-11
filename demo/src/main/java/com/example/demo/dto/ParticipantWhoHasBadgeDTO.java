@@ -16,11 +16,13 @@ public class ParticipantWhoHasBadgeDTO {
 	private String id;
 	private String badgeName;
 	private String userName;
+	private String userId;
 	
 	public ParticipantWhoHasBadgeDTO(final ParticipantWhoHasBadgeEntity entity) {
 		this.id = entity.getId();
 		this.badgeName = entity.getBadge().getName();
 		this.userName = entity.getUser().getEmail();
+		this.userId = entity.getUser().getId();
 	}
 	
 }

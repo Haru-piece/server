@@ -20,8 +20,14 @@ public class ImageService {
 	@Autowired
 	private ImageRepository imageRepository;
 
-	public void write(ImageEntity imageEntity, MultipartFile image) throws Exception{
-		String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images";
+	public String write(ImageEntity imageEntity, MultipartFile image) throws Exception{
+		//for 로컬 서버
+		//String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\image";
+		
+		//for ec2 서버
+		String projectPath = System.getProperty("user.dir") + "/image/";
+		
+		log.info(projectPath);
 		
 		UUID uuid = UUID.randomUUID();
 		
@@ -32,9 +38,11 @@ public class ImageService {
 		image.transferTo(saveFile);
 		
 		imageEntity.setFilename(fileName);
-		imageEntity.setFilepath("/images/" + fileName);
+		imageEntity.setFilepath("/image/" + fileName);
 		
 		imageRepository.save(imageEntity);
+		
+		return "/image/" + fileName;
 	}
 	
 	public List<ImageEntity> retrieveAllImageInfo(){

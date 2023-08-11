@@ -111,5 +111,30 @@ public class UserActionController {
 		}
 	}
 	
+	//챌린지 성공 여부 업데이트
+	@PostMapping("/success/{challengeId}")
+	public ResponseEntity<?> updateSuccessInfoFromChallenge(
+			@AuthenticationPrincipal String userId,
+			@PathVariable String challengeId) {
+		try {
+			// (1) 서비스를 이용해 참여한 챌린지에서 나가기
+			List<ParticipatingChallengeEntity> entities = pCService.updateSuccessInfoFromChallenge(challengeId, userId);
+
+			// (2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ParticipatingChallengeDTO리스트로 변환한다.
+			List<ParticipatingChallengeDTO> dtos = entities.stream().map(ParticipatingChallengeDTO::new).collect(Collectors.toList());
+
+			// (3) 변환된 ChallengeDTO리스트를 이용해 ResponseDTO를 초기화한다.
+			ResponseDTO<ParticipatingChallengeDTO> response = ResponseDTO.<ParticipatingChallengeDTO>builder().data(dtos).build();
+
+			// (4) ResponseDTO를 리턴한다.
+			return ResponseEntity.ok().body(response);
+		} catch (Exception e) {
+			// (6) 혹시 예외가 나는 경우 dto대신 error에 메시지를 넣어 리턴한다.
+			String error = e.getMessage();
+			ResponseDTO<ParticipatingChallengeDTO> response = ResponseDTO.<ParticipatingChallengeDTO>builder().error(error).build();
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+	
 
 }
