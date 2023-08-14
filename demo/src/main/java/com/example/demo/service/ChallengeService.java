@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 
 import com.example.demo.model.ChallengeEntity;
+import com.example.demo.model.ChallengeNotification;
 import com.example.demo.persistence.ChallengeRepository;
 import com.example.demo.model.UserEntity;
 import com.example.demo.persistence.UserRepository;
@@ -31,6 +32,9 @@ public class ChallengeService {
 	
 	@Autowired
 	private BadgeGetConditionChecker badgeGetConditonChecker;
+	
+	@Autowired
+	private ChallengeNotificationService notificationService;
 	
 	// Create With Relation
 	public List<ChallengeEntity> createWithRelation(final ChallengeEntity challengeEntity) {
@@ -73,6 +77,14 @@ public class ChallengeService {
 			badgeGetConditonChecker.createKing(challengeUserEntity);
 		}
 		
+		
+		/* 알림 체크 */
+		ChallengeNotification notification = new ChallengeNotification();
+	    notification.setCategory("All");
+	    notification.setMessage("New Challenge is Created!");
+	    notificationService.sendNotification(notification);
+	    /*        */
+	    
 		return challengeRepository.findByUserId(challengeEntity.getUserId());
 	}
 	

@@ -20,7 +20,7 @@ public class ImageService {
 	@Autowired
 	private ImageRepository imageRepository;
 
-	public String write(ImageEntity imageEntity, MultipartFile image) throws Exception{
+	public ImageEntity write(ImageEntity imageEntity, MultipartFile image) throws Exception{
 		//for 로컬 서버
 		//String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\image";
 		
@@ -42,7 +42,8 @@ public class ImageService {
 		
 		imageRepository.save(imageEntity);
 		
-		return "/image/" + fileName;
+		//return "/image/" + fileName;
+		return imageEntity;
 	}
 	
 	public List<ImageEntity> retrieveAllImageInfo(){

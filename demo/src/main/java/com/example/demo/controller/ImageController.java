@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,11 +54,18 @@ public class ImageController {
 	private ImageService service;
 
 	@PostMapping
-	public String write(ImageEntity imageEntity, MultipartFile image) throws Exception {
+	public ResponseEntity<?> write(ImageEntity imageEntity, MultipartFile image) throws Exception {
 
-		String filePath = service.write(imageEntity, image);
+		ImageEntity entity = service.write(imageEntity, image);
+		
+		ImageDTO dto = new ImageDTO(entity);
+		
+		List<ImageDTO> dtos = new ArrayList<>();
+		dtos.add(dto);
+		
+		ResponseDTO<ImageDTO> response = ResponseDTO.<ImageDTO>builder().data(dtos).build();
 
-		return filePath;
+		return ResponseEntity.ok().body(response);
 	}
 
 	@GetMapping("/{imageName}")
@@ -67,8 +75,6 @@ public class ImageController {
             return;
         }
 
-        log.info("well done");
-        
         File imageFile = new File(projectPath + imageName);
         if (!imageFile.exists() || !imageFile.isFile()) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
