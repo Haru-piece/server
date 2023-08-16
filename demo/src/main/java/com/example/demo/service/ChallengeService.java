@@ -202,6 +202,7 @@ public class ChallengeService {
 	// Retrieve All Challenges
 	public List<ChallengeEntity> retrieveAll() {
 		return challengeRepository.findAll();
+		//return challengeRepository.findAllWithParticipants();
 	}
 	
 	// Retrieve All Challenges Sorted By Date

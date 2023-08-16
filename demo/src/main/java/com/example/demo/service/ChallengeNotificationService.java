@@ -18,6 +18,6 @@ public class ChallengeNotificationService {
 
     public void sendNotification(ChallengeNotification notification) {
         // 알림을 처리하고, 적절한 경로로 메시지 전송
-        messagingTemplate.convertAndSend("/topic/challenge-notifications", notification);
+        messagingTemplate.convertAndSend("/app/challenge-notification", notification);
     }
 }

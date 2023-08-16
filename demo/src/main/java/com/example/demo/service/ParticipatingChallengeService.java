@@ -41,17 +41,22 @@ public class ParticipatingChallengeService {
 		
 		if(original.isPresent()) {
 			UserEntity userEntity = original.get();
+			/*
 			return userEntity.getParticipatingChallengeEntities().stream()
 							 .map(participatingChallenge -> participatingChallenge.getChallenge())
 							 .collect(Collectors.toList());
+			*/
 			
+			return challengeRepository.findByParticipants(userEntity);
+		
 		}
 		else throw new RuntimeException("userId를 잘못 입력했어요!");
 	}
 	
 	// Retrieve Success Info From Challenge
 	public List<ParticipatingChallengeEntity> retrieveSuccessInfoFromChallenge(String challengeId){
-		Optional<ChallengeEntity> original = challengeRepository.findById(challengeId);
+		//Optional<ChallengeEntity> original = challengeRepository.findById(challengeId);
+		Optional<ChallengeEntity> original = challengeRepository.findByIdWithParticipants(challengeId);
 		
 		if(original.isPresent()) {
 			ChallengeEntity challengeEntity = original.get();
