@@ -29,4 +29,6 @@ https://github.com/Haru-piece
 
 ## 기타
 
- Slack, Jira, Postman으로 협업하였습니다. Postman으로 서버가 잘 돌아가는지 테스트했습니다. AWS EC2 서버로 백엔드 서버를 배포했습니다.
+ Slack, Jira, Postman으로 협업하였습니다.    
+ Postman으로 서버가 잘 돌아가는지 테스트했습니다.    
+ AWS EC2 서버로 백엔드 서버를 배포했습니다.
