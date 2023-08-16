@@ -5,7 +5,7 @@
 구성원이 관심있어 할 만할 챌린지가 만들어졌을 경우 알림으로 알려줍니다.   
 또, 특정 결과를 내면 뱃지를 수여하여 참여자의 의욕을 올려줍니다.
 
-https://github.com/Haru-piece
+Client 포함 전체 코드: https://github.com/Haru-piece
 
 
 
