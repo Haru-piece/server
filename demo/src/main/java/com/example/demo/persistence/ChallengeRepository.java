@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface ChallengeRepository extends JpaRepository<ChallengeEntity, String>{
+	
 	List<ChallengeEntity> findByUserId(String userId);
 	List<ChallengeEntity> findByCategory(String category);
 	List<ChallengeEntity> findByCategoryOrderByParticipantCountDesc(String category);
