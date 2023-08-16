@@ -14,7 +14,7 @@ https://github.com/Haru-piece
 
 **Client:** 
 
-**Server:** Spring boot, Spring security, WebSocket(STOMP messaging with Spring)
+**Server:** Spring boot, Spring security, Spring Data JPA, WebSocket(STOMP messaging with Spring)
 
 
 ## Team
