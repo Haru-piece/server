@@ -23,9 +23,10 @@ Client 포함 전체 코드: https://github.com/Haru-piece
 - Client: [@임보성](https://www.github.com/octokatherine)
 - Server: [@김현규](https://www.github.com/kimm240), [@김기현](https://www.github.com/octokatherine)
 
+## Optimizations
 
-
-
+- 인덱스를 추가하여 검색 속도 개선   
+- JPA N + 1문제를 해결하기 위해, Fetch Join을 적용하였습니다.   
 
 ## 기타
 
