@@ -17,7 +17,7 @@ public interface ChallengeRepository extends JpaRepository<ChallengeEntity, Stri
 	List<ChallengeEntity> findByCategory(String category);
 	List<ChallengeEntity> findByCategoryOrderByParticipantCountDesc(String category);
 	
-	//JPA N + 1문제를 해결하기 위해, FETCH JOIN을 사용했다.
+	//JPA N+1문제를 해결하기 위해, FETCH JOIN을 사용했다.
 	@Query("SELECT c FROM ChallengeEntity c JOIN FETCH c.participatingChallengeEntities WHERE c.id = :challengeId")
 	Optional<ChallengeEntity> findByIdWithParticipants(@Param("challengeId") String challengeId);
 	
