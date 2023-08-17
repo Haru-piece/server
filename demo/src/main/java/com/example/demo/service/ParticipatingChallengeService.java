@@ -1,21 +1,19 @@
 package com.example.demo.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
-
-import com.example.demo.model.ParticipatingChallengeEntity;
-import com.example.demo.persistence.ParticipatingChallengeRepository;
-
-import com.example.demo.model.UserEntity;
-import com.example.demo.persistence.UserRepository;
-
-import com.example.demo.model.ChallengeEntity;
-import com.example.demo.persistence.ChallengeRepository;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.model.ChallengeEntity;
+import com.example.demo.model.ParticipatingChallengeEntity;
+import com.example.demo.model.UserEntity;
+import com.example.demo.persistence.ChallengeRepository;
+import com.example.demo.persistence.ParticipatingChallengeRepository;
+import com.example.demo.persistence.UserRepository;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
@@ -30,32 +28,42 @@ public class ParticipatingChallengeService {
 	@Autowired
 	private ChallengeRepository challengeRepository;
 	
-	// Retrieve All participating Challenge Entity
+	// 모든 '누가 어떤 챌린지에 참여하고 있는지'의 정보를 리턴
 	public List<ParticipatingChallengeEntity> retrieveAll() {
 		return participatingChallengeRepository.findAll();
 	}
 	
-	// Retrieve user's All participating Challenge Entity 
+	// 유저가 참여하고 있는 모든 챌린지들의 리스트를 리턴 
 	public List<ChallengeEntity> retrieveParticipateAll(String userId){
 		Optional<UserEntity> original = userRepository.findById(userId);
 		
 		if(original.isPresent()) {
 			UserEntity userEntity = original.get();
+			
+			//Fetch Join을 활용하여 JPA N + 1 문제 해결
+			
+			//이전 리턴
 			/*
 			return userEntity.getParticipatingChallengeEntities().stream()
 							 .map(participatingChallenge -> participatingChallenge.getChallenge())
 							 .collect(Collectors.toList());
 			*/
 			
+			//최적화한 이후 리턴
 			return challengeRepository.findByParticipants(userEntity);
 		
 		}
 		else throw new RuntimeException("userId를 잘못 입력했어요!");
 	}
 	
-	// Retrieve Success Info From Challenge
+	// 챌린지에서 누가 성공했는지 여부를 리턴
 	public List<ParticipatingChallengeEntity> retrieveSuccessInfoFromChallenge(String challengeId){
+		//Fetch Join을 활용하여 JPA N + 1 문제 해결
+		
+		//이전 리턴
 		//Optional<ChallengeEntity> original = challengeRepository.findById(challengeId);
+		
+		//최적화한 이후 리턴
 		Optional<ChallengeEntity> original = challengeRepository.findByIdWithParticipants(challengeId);
 		
 		if(original.isPresent()) {
@@ -63,11 +71,11 @@ public class ParticipatingChallengeService {
 			return challengeEntity.getParticipatingChallengeEntities();
 		}
 		
-		else throw new RuntimeException("challengeId를 잘못 입력했어요! ㅡㅡ");
+		else throw new RuntimeException("challengeId를 잘못 입력했어요!");
 		
 	}
 	
-	// Update Success Info From Challenge
+	// 챌린지에 성공 여부 업데이트
 	public List<ParticipatingChallengeEntity> updateSuccessInfoFromChallenge(String challengeId, 
 																			 String userId){
 		Optional<ParticipatingChallengeEntity> original = participatingChallengeRepository.findByChallengeIdAndUserId(challengeId, userId);
@@ -83,7 +91,7 @@ public class ParticipatingChallengeService {
 			return retrieveSuccessInfoFromChallenge(challengeId);
 		}
 			
-		else throw new RuntimeException("challengeId나 userId를 잘못 입력했어요! ㅡㅡ");
+		else throw new RuntimeException("challengeId나 userId를 잘못 입력했어요!");
 			
 	}
 

@@ -1,22 +1,22 @@
 package com.example.demo.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Column;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.OneToMany;
 
 
 @Builder
@@ -38,7 +38,6 @@ public class ChallengeEntity {
 	private String category;
 	private Integer participantCount;
 	
-	/*     Dictionary로 자료구조 변경 예정        */
 	//챌린지에 참여한 유저들의 정보를 저장
 	@OneToMany(mappedBy = "challenge")
 	private List<ParticipatingChallengeEntity> participatingChallengeEntities = new ArrayList<ParticipatingChallengeEntity>();

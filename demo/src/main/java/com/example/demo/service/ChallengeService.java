@@ -1,20 +1,21 @@
 package com.example.demo.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
 
 import com.example.demo.model.ChallengeEntity;
 import com.example.demo.model.ChallengeNotification;
-import com.example.demo.persistence.ChallengeRepository;
-import com.example.demo.model.UserEntity;
-import com.example.demo.persistence.UserRepository;
 import com.example.demo.model.ParticipatingChallengeEntity;
+import com.example.demo.model.UserEntity;
+import com.example.demo.persistence.ChallengeRepository;
 import com.example.demo.persistence.ParticipatingChallengeRepository;
+import com.example.demo.persistence.UserRepository;
 
-import java.util.List;
-import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -78,12 +79,11 @@ public class ChallengeService {
 		}
 		
 		
-		/* 알림 체크 */
+		// 알림 체크 
 		ChallengeNotification notification = new ChallengeNotification();
 	    notification.setCategory("All");
 	    notification.setMessage("New Challenge is Created!");
 	    notificationService.sendNotification(notification);
-	    /*        */
 	    
 		return challengeRepository.findByUserId(challengeEntity.getUserId());
 	}

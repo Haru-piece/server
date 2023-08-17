@@ -1,14 +1,14 @@
 package com.example.demo.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.example.demo.model.UserEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @Builder

@@ -28,7 +28,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
         BadgeEntity participateKing = BadgeEntity.builder().name("ParticipateKing").build();
         badgeRepository.save(participateKing);
         
-        // 추가적인 챌린지 데이터 저장
+        // 뱃지 데이터 추가 저장
         // ...
     }
 }

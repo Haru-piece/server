@@ -1,5 +1,10 @@
 package com.example.demo.dto;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.example.demo.model.ChallengeEntity;
 import com.example.demo.model.ParticipatingChallengeEntity;
 
@@ -7,12 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;  
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Builder
 @NoArgsConstructor
@@ -22,6 +21,7 @@ public class ChallengeDTO {
 	private String id;
 	private String title;
 	private boolean done;
+	
 	//추가한 날짜
 	private LocalDateTime addedDate;
 	

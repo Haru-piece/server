@@ -1,24 +1,23 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.persistence.Column;
-
-import javax.persistence.OneToMany;
-import javax.persistence.ElementCollection;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
@@ -42,8 +41,6 @@ public class UserEntity {
 	@Column(nullable = false)
 	private String password; // 패스워드
 	
-
-	/*     Dictionary로 자료구조 변경 예정        */
 	@ElementCollection
 	private List<String> recentViewChallengeId; //유저가 최근에 조회한 챌린지들의 Id를 저장
 		

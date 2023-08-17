@@ -1,17 +1,18 @@
 package com.example.demo.dto;
 
+import com.example.demo.model.ParticipantWhoHasBadgeEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import com.example.demo.model.ParticipantWhoHasBadgeEntity;
 
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+//뱃지를 가진 유저의 정보
 public class ParticipantWhoHasBadgeDTO {
 	private String id;
 	private String badgeName;

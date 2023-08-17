@@ -2,27 +2,19 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.demo.model.BadgeEntity;
-import com.example.demo.persistence.BadgeRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.model.BadgeEntity;
+import com.example.demo.model.ParticipantWhoHasBadgeEntity;
+import com.example.demo.model.UserEntity;
+import com.example.demo.persistence.BadgeRepository;
+import com.example.demo.persistence.ParticipantWhoHasBadgeRepository;
+import com.example.demo.persistence.UserRepository;
+
 import lombok.extern.slf4j.Slf4j;
 
-import com.example.demo.model.ChallengeEntity;
-import com.example.demo.persistence.ChallengeRepository;
-import com.example.demo.model.UserEntity;
-import com.example.demo.persistence.UserRepository;
-import com.example.demo.model.ParticipatingChallengeEntity;
-import com.example.demo.persistence.ParticipatingChallengeRepository;
-
-import com.example.demo.model.ParticipantWhoHasBadgeEntity;
-import com.example.demo.persistence.ParticipantWhoHasBadgeRepository;
-
-import java.util.List;
-import java.util.Optional;
-
+//뱃지를 부여
 @Slf4j
 @Service
 public class BadgeGiver {
@@ -70,12 +62,12 @@ public class BadgeGiver {
 		participantWhoHasBadgeRepository.save(pWHBadge);
 	}	
 	
-	// Retrieve All Badges
+	// 모든 뱃지의 정보 리턴
 	public List<BadgeEntity> retrieveAll() {
 		return badgeRepository.findAll();
 	}
 	
-	// Retrieve All Relations of Badge
+	// 누가 어떤 뱃지를 가지고 있는지의 정보 리턴
 	public List<ParticipantWhoHasBadgeEntity> retrieveBadgeRelationAll(){
 		return participantWhoHasBadgeRepository.findAll();
 	}

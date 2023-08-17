@@ -19,19 +19,18 @@ import com.example.demo.service.ChallengeService;
 
 import lombok.extern.slf4j.Slf4j;
 
+//챌린지를 C R U D하고, 조회하는 컨트롤러
 @Slf4j
 @RestController
 @RequestMapping("challenge")
 public class ChallengeCrudController {
-	
+
 	@Autowired
 	private ChallengeService service;
-	
-	//Create
+
+	// 챌린지를 만듬
 	@PostMapping
-	public ResponseEntity<?> createChallenge(
-			@AuthenticationPrincipal String userId,
-			@RequestBody ChallengeDTO dto) {
+	public ResponseEntity<?> createChallenge(@AuthenticationPrincipal String userId, @RequestBody ChallengeDTO dto) {
 		try {
 			// (1) ChallengeEntity로 변환한다.
 			ChallengeEntity entity = ChallengeDTO.toEntity(dto);
@@ -41,7 +40,7 @@ public class ChallengeCrudController {
 
 			// (3) 유저 아이디를 설정 해 준다.
 			entity.setUserId(userId);
-			
+
 			// (4) 서비스를 이용해 Challenge엔티티를 생성한다.
 			List<ChallengeEntity> entities = service.createWithRelation(entity);
 
@@ -60,11 +59,10 @@ public class ChallengeCrudController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
-	
-	// Retrieve
+
+	// 사용자가 만든 챌린지를 리턴
 	@GetMapping
-	public ResponseEntity<?> retrieveChallengeList(
-			@AuthenticationPrincipal String userId) {
+	public ResponseEntity<?> retrieveChallengeList(@AuthenticationPrincipal String userId) {
 		// (1) 서비스 메서드의 retrieve메서드를 사용해 Challenge리스트를 가져온다
 		List<ChallengeEntity> entities = service.retrieve(userId);
 
@@ -77,45 +75,12 @@ public class ChallengeCrudController {
 		// (4) ResponseDTO를 리턴한다.
 		return ResponseEntity.ok().body(response);
 	}
-	
-	
+
 	////////////////////////
-	//     Update         //
-	////////////////////////
-	
-	
-	////////////////////////
-	//     Delete         //
+	// Update //
 	////////////////////////
 
-	
-	//특정 챌린지 조희
-	@GetMapping("/this")
-	public ResponseEntity<?> retrieveChallenge(
-			@AuthenticationPrincipal String userId,
-			@RequestBody ChallengeDTO dto){
-		
-		try {
-			// (1) ChallengeEntity로 변환한다.
-			ChallengeEntity entity = ChallengeDTO.toEntity(dto);
-
-			// (2) 서비스를 이용해 특정 Challenge엔티티를 조회한다.
-			List<ChallengeEntity> entities = service.retrieveSpecificChallenge(entity, userId);
-
-			// (3) 자바 스트림을 이용해 리턴된 엔티티 리스트를 ChallengeDTO리스트로 변환한다.
-			List<ChallengeDTO> dtos = entities.stream().map(ChallengeDTO::new).collect(Collectors.toList());
-
-			// (4) 변환된 ChallengeDTO리스트를 이용해 ResponseDTO를 초기화한다.
-			ResponseDTO<ChallengeDTO> response = ResponseDTO.<ChallengeDTO>builder().data(dtos).build();
-
-			// (5) ResponseDTO를 리턴한다.
-			return ResponseEntity.ok().body(response);
-		} catch (Exception e) {
-			// (6) 혹시 예외가 나는 경우 dto대신 error에 메시지를 넣어 리턴한다.
-			String error = e.getMessage();
-			ResponseDTO<ChallengeDTO> response = ResponseDTO.<ChallengeDTO>builder().error(error).build();
-			return ResponseEntity.badRequest().body(response);
-		}
-		
-	}
+	////////////////////////
+	// Delete //
+	////////////////////////
 }
