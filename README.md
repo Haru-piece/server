@@ -12,7 +12,7 @@ Client 포함 전체 코드: https://github.com/Haru-piece
 
 ## Tech Stack
 
-**Client:** 
+**Client:** Kotlin
 
 **Server:** Spring boot, Spring security, Spring Data JPA, WebSocket(STOMP messaging with Spring)
 
@@ -26,7 +26,7 @@ Client 포함 전체 코드: https://github.com/Haru-piece
 ## Optimizations
 
 - 인덱스를 추가하여 검색 속도 개선   
-- JPA N + 1문제를 해결하기 위해, Fetch Join을 적용하였습니다.   
+- JPA N + 1문제를 해결하기 위해, Fetch Join을 적용 
 
 ## 기타
 
