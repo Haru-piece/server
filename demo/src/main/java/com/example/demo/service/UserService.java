@@ -22,10 +22,34 @@ public class UserService {
 	//사용자 만들기
 	public UserEntity create(final UserEntity userEntity) {
 		validate(userEntity);
-		
 		return userRepository.save(userEntity);
 	}
+	
+	// 사용자 업데이트
+    public UserEntity update(final UserEntity userEntity) {
+        validate(userEntity);
 
+        // Check if the user exists
+        if (!userRepository.existsById(userEntity.getId())) {
+            throw new RuntimeException("User not found with ID: " + userEntity.getId());
+        }
+
+        return userRepository.save(userEntity);
+    }
+	
+	//사용자 삭제
+	public void remove(final UserEntity userEntity) {
+		validate(userEntity);
+		
+		try {
+			userRepository.delete(userEntity);
+		}catch(Exception e) {
+			log.error("error deleting entity",userEntity.getId(),e);
+			
+			throw new RuntimeException("Error Deleting Entity " + userEntity.getId());
+		}
+	}
+	
 	//입력받은 정보 맞는지 확인
 	public UserEntity getByCredentials(final String email, final String password, final PasswordEncoder encoder) {
 		final UserEntity originalUser = userRepository.findByEmail(email);

@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -78,8 +80,70 @@ public class UserController {
 
 	/**********************/
 	/* È¸¿ø Å»Åð */
+	
+	@DeleteMapping("/delete")
+	public ResponseEntity<?> deleteUser(@RequestBody UserDTO userDTO){
+		try {
+	        // First, retrieve the user based on the provided userDTO's email
+	        UserEntity userToDelete = userService.getByCredentials(userDTO.getEmail(), userDTO.getPassword(), passwordEncoder);
+
+	        if (userToDelete != null) {
+	            // Delete the user using the UserService's remove method
+	            userService.remove(userToDelete);
+
+	            // Construct a success response
+	            ResponseDTO<String> response = ResponseDTO.<String>builder().deleteMessage("User deleted successfully").build();
+
+	            return ResponseEntity.ok().body(response);
+	        } else {
+	            // If user is not found or credentials don't match, return an error response
+	            ResponseDTO<String> response = ResponseDTO.<String>builder().error("User not found or credentials don't match").build();
+
+	            return ResponseEntity.badRequest().body(response);
+	        }
+	    } catch (Exception e) {
+	        // Handle any exceptions that might occur during the deletion process
+	        ResponseDTO<String> response = ResponseDTO.<String>builder().error("Error deleting user: " + e.getMessage()).build();
+
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+	    }
+	}
 	/**********************/
 
+	// Update User
+	@PostMapping("/update")
+	public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO){
+	    try {
+	        // Retrieve the user based on the provided userDTO's email
+	        UserEntity userToUpdate = userService.getByCredentials(userDTO.getEmail(), userDTO.getPassword(), passwordEncoder);
+
+	        if (userToUpdate != null) {
+	            // Update the user's properties based on the values in the userDTO
+	            userToUpdate.setUsername(userDTO.getUsername());
+	            userToUpdate.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Update password
+	            // Update other properties as needed
+
+	            // Save the updated user using the UserService's create method
+	            UserEntity updatedUser = userService.create(userToUpdate);
+
+	            // Construct a success response
+	            ResponseDTO<UserDTO> response = ResponseDTO.<UserDTO>builder().updatedUser(new UserDTO(updatedUser)).build();
+
+	            return ResponseEntity.ok().body(response);
+	        } else {
+	            // If user is not found or credentials don't match, return an error response
+	            ResponseDTO<String> response = ResponseDTO.<String>builder().error("User not found or credentials don't match").build();
+
+	            return ResponseEntity.badRequest().body(response);
+	        }
+	    } catch (Exception e) {
+	        // Handle any exceptions that might occur during the update process
+	        ResponseDTO<String> response = ResponseDTO.<String>builder().error("Error updating user: " + e.getMessage()).build();
+
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+	    }
+	}
+	//////////////
 	// Retrieve All User
 	@GetMapping("/all")
 	public ResponseEntity<?> retrieveAllUserList(@AuthenticationPrincipal String userId) {
