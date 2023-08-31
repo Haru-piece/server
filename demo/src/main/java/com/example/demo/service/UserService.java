@@ -29,7 +29,7 @@ public class UserService {
     public UserEntity update(final UserEntity userEntity) {
         validate(userEntity);
 
-        // Check if the user exists
+        // 유저 있는지 확인
         if (!userRepository.existsById(userEntity.getId())) {
             throw new RuntimeException("User not found with ID: " + userEntity.getId());
         }
@@ -38,7 +38,7 @@ public class UserService {
     }
 	
 	//사용자 삭제
-	public void remove(final UserEntity userEntity) {
+	public void delete(final UserEntity userEntity) {
 		validate(userEntity);
 		
 		try {

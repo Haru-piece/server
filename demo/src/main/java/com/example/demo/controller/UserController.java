@@ -80,69 +80,54 @@ public class UserController {
 
 	/**********************/
 	/* 회원 탈퇴 */
-	
+
 	@DeleteMapping("/delete")
-	public ResponseEntity<?> deleteUser(@RequestBody UserDTO userDTO){
+	public ResponseEntity<?> deleteUser(@RequestBody UserDTO userDTO) {
 		try {
-	        // First, retrieve the user based on the provided userDTO's email
-	        UserEntity userToDelete = userService.getByCredentials(userDTO.getEmail(), userDTO.getPassword(), passwordEncoder);
+			// 유저 찾기
+			UserEntity userToDelete = userService.getByCredentials(userDTO.getEmail(), userDTO.getPassword(),
+					passwordEncoder);
 
-	        if (userToDelete != null) {
-	            // Delete the user using the UserService's remove method
-	            userService.remove(userToDelete);
+			if (userToDelete != null) {
+				// 서비스의 삭제 메소드를 이용하여 유저 삭제
+				userService.delete(userToDelete);
 
-	            // Construct a success response
-	            ResponseDTO<String> response = ResponseDTO.<String>builder().deleteMessage("User deleted successfully").build();
+				// 성공 응답
+				ResponseDTO<String> response = ResponseDTO.<String>builder().deleteMessage("User deleted successfully")
+						.build();
 
-	            return ResponseEntity.ok().body(response);
-	        } else {
-	            // If user is not found or credentials don't match, return an error response
-	            ResponseDTO<String> response = ResponseDTO.<String>builder().error("User not found or credentials don't match").build();
+				return ResponseEntity.ok().body(response);
+			} else {
+				// 유저가 존재하지 않거나 하면 에러메시지
+				ResponseDTO<String> response = ResponseDTO.<String>builder()
+						.error("User not found or credentials don't match").build();
 
-	            return ResponseEntity.badRequest().body(response);
-	        }
-	    } catch (Exception e) {
-	        // Handle any exceptions that might occur during the deletion process
-	        ResponseDTO<String> response = ResponseDTO.<String>builder().error("Error deleting user: " + e.getMessage()).build();
+				return ResponseEntity.badRequest().body(response);
+			}
+		} catch (Exception e) {
+			// 삭제할때 일어날 수 있는 문제를 담당하는곳
+			ResponseDTO<String> response = ResponseDTO.<String>builder().error("Error deleting user: " + e.getMessage())
+					.build();
 
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-	    }
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+		}
 	}
+
 	/**********************/
 
 	// Update User
 	@PostMapping("/update")
-	public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO){
-	    try {
-	        // Retrieve the user based on the provided userDTO's email
-	        UserEntity userToUpdate = userService.getByCredentials(userDTO.getEmail(), userDTO.getPassword(), passwordEncoder);
-
-	        if (userToUpdate != null) {
-	            // Update the user's properties based on the values in the userDTO
-	            userToUpdate.setUsername(userDTO.getUsername());
-	            userToUpdate.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Update password
-	            // Update other properties as needed
-
-	            // Save the updated user using the UserService's create method
-	            UserEntity updatedUser = userService.create(userToUpdate);
-
-	            // Construct a success response
-	            ResponseDTO<UserDTO> response = ResponseDTO.<UserDTO>builder().updatedUser(new UserDTO(updatedUser)).build();
-
-	            return ResponseEntity.ok().body(response);
-	        } else {
-	            // If user is not found or credentials don't match, return an error response
-	            ResponseDTO<String> response = ResponseDTO.<String>builder().error("User not found or credentials don't match").build();
-
-	            return ResponseEntity.badRequest().body(response);
-	        }
-	    } catch (Exception e) {
-	        // Handle any exceptions that might occur during the update process
-	        ResponseDTO<String> response = ResponseDTO.<String>builder().error("Error updating user: " + e.getMessage()).build();
-
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-	    }
+	public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO) {
+		// DTO를 entity로 변환
+		UserEntity user = UserEntity.builder().email(userDTO.getEmail()).username(userDTO.getUsername())
+				.password(passwordEncoder.encode(userDTO.getPassword())).createCount(0).participateCount(0).build();
+		// 서비스를 사용하여 entity 업데이트
+		UserEntity updatedUser = userService.update(user);
+		UserDTO updatedUserDTO = UserDTO.builder().email(updatedUser.getEmail()).id(updatedUser.getId())
+				.username(updatedUser.getUsername()).createCount(updatedUser.getCreateCount()).build();
+		return ResponseEntity.ok(updatedUserDTO);
 	}
+
 	//////////////
 	// Retrieve All User
 	@GetMapping("/all")
