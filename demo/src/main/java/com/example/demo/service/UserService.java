@@ -27,14 +27,23 @@ public class UserService {
 	
 	// 사용자 업데이트
     public UserEntity update(final UserEntity userEntity) {
-        validate(userEntity);
+        //validate(userEntity);
 
         // 유저 있는지 확인
-        if (!userRepository.existsById(userEntity.getId())) {
-            throw new RuntimeException("User not found with ID: " + userEntity.getId());
-        }
+    	System.out.println("hi");
+    	final Optional<UserEntity>original=userRepository.findById(userEntity.getId());
+    	System.out.println("hi2");
+    	if(original.isPresent()) {
+    		final UserEntity tmp=original.get();
+    		tmp.setUsername(userEntity.getUsername());
+    		userRepository.save(tmp);
+    	}
+//        if (!userRepository.existsById(userEntity.getId())) {
+//        	System.out.println("alsdkfjlsakdjflksadf");
+//            throw new RuntimeException("User not found with ID: " + userEntity.getId());
+//        }
 
-        return userRepository.save(userEntity);
+        return null;
     }
 	
 	//사용자 삭제

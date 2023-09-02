@@ -32,6 +32,7 @@ public class UserDTO {
 
 	public UserDTO(final UserEntity entity) {
 		this.id = entity.getId();
+		System.out.println("@@@@@@@@@@@@@@@@ "+this.id);
 		this.username = entity.getUsername();
 		this.password = entity.getPassword();
 		this.recentViewChallengeId = entity.getRecentViewChallengeId();

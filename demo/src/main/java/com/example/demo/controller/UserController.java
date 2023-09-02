@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -116,12 +117,14 @@ public class UserController {
 	/**********************/
 
 	// Update User
-	@PostMapping("/update")
+	@PutMapping("/update")
 	public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO) {
 		// DTO를 entity로 변환
+		System.out.println("wut");
 		UserEntity user = UserEntity.builder().email(userDTO.getEmail()).username(userDTO.getUsername())
 				.password(passwordEncoder.encode(userDTO.getPassword())).createCount(0).participateCount(0).build();
 		// 서비스를 사용하여 entity 업데이트
+		System.out.println("checkpoint");
 		UserEntity updatedUser = userService.update(user);
 		UserDTO updatedUserDTO = UserDTO.builder().email(updatedUser.getEmail()).id(updatedUser.getId())
 				.username(updatedUser.getUsername()).createCount(updatedUser.getCreateCount()).build();
