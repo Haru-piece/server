@@ -20,8 +20,8 @@ Client 포함 전체 코드: https://github.com/Haru-piece
 ## Team
 
 - 기획
-- Client: [@임보성](https://www.github.com/octokatherine)
-- Server: [@김현규](https://www.github.com/kimm240), [@김기현](https://www.github.com/octokatherine)
+- Client: [@임보성](https://www.github.com/brudenell)
+- Server: [@김현규](https://www.github.com/kimm240), [@김기현](https://www.github.com/boogahead)
 
 ## Optimizations
 
