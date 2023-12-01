@@ -25,7 +25,7 @@ Client 포함 전체 코드: https://github.com/Haru-piece
 
 ## Optimizations
 
-- JPA N + 1문제를 해결하기 위해, Fetch Join을 적용 
+- One To Many의 테이블을 DB에서 가져올 때 발생하는 JPA N + 1문제를 해결하기 위해, Fetch Join을 적용 
 
 ## 기타
 
